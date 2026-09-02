@@ -1,0 +1,17 @@
+latitude tells us how far north or south is 
+longitude tells us how far east or west is
+
+
+#CODE
+from geopy.geocoders import Nominatim
+
+geolocator = Nominatim(user_agent="my_geocoder")
+
+place = input("Enter locations : ")
+location = geolocator.geocode(place)
+
+print(place)
+print(location)
+print(location.latitude)
+print(location.longitude)
+print(location.address)
