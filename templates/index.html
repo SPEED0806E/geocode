@@ -20,6 +20,7 @@
         <script>
             // Initialize the map
             var map = L.map('map').setView([20.5937, 78.9629], 5);
+            var clickedMarker;
             // Add a tile layer to the map
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
             L.marker([20.5937, 78.9629]).addTo(map).bindPopup(`
@@ -27,7 +28,29 @@
             Powai, Mumbai, Maharashtra 400076<br>
             Educational Institution`).openPopup();
             map.on('click', function(e) {
-                L.marker(e.latlng).addTo(map).bindPopup('latitude:' + e.latlng.lat.toFixed(4) + '<br>longitude:' + e.latlng.lng.toFixed(4)).openPopup(map);
+                if (clickedMarker) {
+                    map.removeLayer(clickedMarker);
+                }
+                clickedMarker = L.marker(e.latlng).addTo(map).bindPopup('latitude:' + e.latlng.lat.toFixed(4) + '<br>longitude:' + e.latlng.lng.toFixed(4)).openPopup(map);
+            });
+
+            var palghar = [19.6967, 72.7657];
+            var manor = [19.7000, 72.9400];
+
+            // markers
+            L.marker(palghar).addTo(map).bindPopup('Palghar')
+            L.marker(manor).addTo(map).bindPopup('Manor')
+
+            var url = "https://router.project-osrm.org/route/v1/driving/" + palghar[1] + "," + palghar[0] + "," + manor[1] + "," + manor[0] + "?overview=full&geometries=geojson";
+            fetch(url).then(response => response.json()).then(data => {
+                console.log(data);
+                var route = data.routes[0].geometry;
+                L.geoJSON(route, {
+                    style: {
+                        color: 'blue',
+                        weight: 5
+                    }
+                }).addTo(map);
             });
         </script>
 
