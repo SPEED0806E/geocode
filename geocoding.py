@@ -1,5 +1,6 @@
 from geopy.geocoders import Nominatim
 from geopy.distance import geodesic
+from flask import Flask, request, render_template
 import sqlite3
 # create a geocoder
 geolocator = Nominatim(user_agent="my_geocoder")
@@ -17,6 +18,15 @@ CREATE TABLE IF NOT EXISTS places (
     longitude REAL NOT NULL
 )
 """)
+
+app = Flask(__name__)
+
+@app.route("/")
+def index():
+    return render_template("index.html")
+
+if __name__ == "__main__":
+    app.run(debug=True)
 
 # search for a place
 place = input("Enter a place name : ").capitalize()
@@ -58,3 +68,4 @@ distance = geodesic(location_a, location_b)
 
 print(distance)
 print(distance.meters)
+
